@@ -1,7 +1,6 @@
 from multiprocessing import Process,Pipe
 from time import sleep
-import gtk
-import gobject
+
 from SimpleCV import Image,Camera
 
 
@@ -10,6 +9,15 @@ class GtkWorker(Process):
     def __init__(self,connection):
         Process.__init__(self)
         self.connection = connection
+
+    def run(self):
+        import gtk
+        import gobject
+        
+        self.gtk = gtk
+        self.gobject = gobject
+        
+        
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.window.connect("destroy", self.destroy)
         self.image = gtk.Image()
@@ -18,18 +26,15 @@ class GtkWorker(Process):
         self.window.show_all()
 
         gobject.io_add_watch(self.connection.fileno(),gobject.IO_IN,self.checkMsg)
-        
-
-    def run(self):
         gtk.main()
         
     def destroy(self,widget,data=None):
-        gtk.main_quit()
+        self.gtk.main_quit()
     
     def showImg(self,data):
 
 
-        pix =  gtk.gdk.pixbuf_new_from_data(data['data'], gtk.gdk.COLORSPACE_RGB, False, data['depth'], data['width'], data['height'], data['width']*3)
+        pix =  self.gtk.gdk.pixbuf_new_from_data(data['data'], self.gtk.gdk.COLORSPACE_RGB, False, data['depth'], data['width'], data['height'], data['width']*3)
         self.image.set_from_pixbuf(pix)
     
     def checkMsg(self,source=None,condition=None):

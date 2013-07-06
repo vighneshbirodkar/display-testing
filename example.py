@@ -1,9 +1,11 @@
 from GtkDisp import *
 from SimpleCV import Camera
 
-disp = GtkDisplay()
+disp1 = GtkDisplay()
+disp2 = GtkDisplay()
 cam = Camera()
 
 while(True):
-    disp.showImg(cam.getImage())
+    disp1.showImg(cam.getImage())
+    disp2.showImg(cam.getImage())
 
