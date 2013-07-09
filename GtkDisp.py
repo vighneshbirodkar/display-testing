@@ -48,6 +48,7 @@ class GtkWorker(Process):
         
         #handle data if it's there
         if(dataThere):
+            print "There is data " + `id(self)`
             self.checkMsg()
         return True
     def showImg(self,data):
@@ -59,7 +60,7 @@ class GtkWorker(Process):
     
     def checkMsg(self,source=None,condition=None):
         
-        
+        print "Checking Message " + `id(self)`
         #examine the message and figure out what to do with it
         try:
             msg = self.connection.recv()
@@ -74,6 +75,8 @@ class GtkWorker(Process):
             gtk.main_quit()
         else:
             print 'unknown message'
+            
+        print "Message Handled " + `id(self)`
         return True
         
 class GtkDisplay:
@@ -92,8 +95,9 @@ class GtkDisplay:
         dic['width'] = img.width
         dic['height'] = img.height
         dic['func'] = 'display'
+        print "Sending " + `id(self)`
         self.connection.send(dic)
-
+        print "Finished Sending " + `id(self)`
 
 
 
