@@ -1,8 +1,7 @@
 from multiprocessing import Process,Pipe
 from time import sleep
 
-from SimpleCV import Image,Camera
-
+#from SimpleCV import Image,Camera
 
 
 class GtkWorker(Process):
@@ -25,12 +24,17 @@ class GtkWorker(Process):
         self.window.add(self.image)
         self.window.show_all()
 
-        gobject.io_add_watch(self.connection.fileno(),gobject.IO_IN,self.checkMsg)
+        gobject.idle_add(self.pollMsg,None)
         gtk.main()
         
     def destroy(self,widget,data=None):
         self.gtk.main_quit()
-    
+
+    def pollMsg(self,data=None):
+        dataThere = self.connection.poll(.10)
+        if(dataThere):
+            self.checkMsg()
+        return True
     def showImg(self,data):
 
 
@@ -66,7 +70,7 @@ class GtkDisplay:
         dic['height'] = img.height
         dic['func'] = 'display'
         self.connection.send(dic)
-   
+
 
 
 
