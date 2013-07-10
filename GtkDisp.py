@@ -97,6 +97,7 @@ class GtkDisplay:
         dic['height'] = img.height
         dic['func'] = 'display'
         print "Sending " + `id(self)`
+        #self.connection.close()
         self.connection.send(dic)
         print "Finished Sending " + `id(self)`
 

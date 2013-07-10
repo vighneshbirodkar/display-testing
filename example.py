@@ -1,7 +1,12 @@
+import socket
+print socket.getdefaulttimeout()
+
+
 from GtkDisp import *
 
 
 from time import sleep
+sleep(2)
 
 
 if ( __name__ == '__main__'):
@@ -15,4 +20,5 @@ if ( __name__ == '__main__'):
     while(True):
         img = cam.getImage()
         disp1.showImg(img)
+        print "Timeout = ",socket.getdefaulttimeout()
         disp2.showImg(img.invert())
