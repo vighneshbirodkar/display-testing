@@ -4,9 +4,10 @@ print socket.getdefaulttimeout()
 
 from GtkDisp import *
 
-
+import socket
+socket.setdefaulttimeout(None)
 from time import sleep
-sleep(2)
+
 
 
 if ( __name__ == '__main__'):
