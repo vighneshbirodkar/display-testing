@@ -3,7 +3,8 @@ from time import sleep
 from sys import exit
 import socket
 
-socket.setdefaulttimeout(120.0)
+#uncomment this to make it work in older versions
+#socket.setdefaulttimeout(120.0)
 
 string = 'x'*800000
 class Worker(Process):
