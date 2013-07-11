@@ -1,5 +1,6 @@
 from multiprocessing import Process,Pipe
 from time import sleep
+import sys
 
 #from SimpleCV import Image,Camera
 
@@ -36,9 +37,16 @@ class GtkWorker(Process):
         
         #starts gtk
         gtk.main()
+        sys.exit(0)
+        
         
     def destroy(self,widget,data=None):
-        self.gtk.main_quit()
+        print 'quitting'
+        self.connection.send("close")
+        #self.gtk.main_quit()
+        
+        
+        
 
     def pollMsg(self,data=None):
     
@@ -83,20 +91,28 @@ class GtkDisplay:
         self.connection = parentConn
         self.worker = GtkWorker(childConn)
         self.worker.start()
+        self.workerAlive = True
         
     def showImg(self,img):
         #all functions are implemented with IPC
-        dic = {}
-        dic['data'] = img.toString()
-        dic['depth'] = img.depth
-        dic['width'] = img.width
-        dic['height'] = img.height
-        dic['func'] = 'display'
-        print "Sending " + `id(self)`
-        #self.connection.close()
-        self.connection.send(dic)
-        print "Finished Sending " + `id(self)`
-
+        if(self.workerAlive):
+            dic = {}
+            dic['data'] = img.toString()
+            dic['depth'] = img.depth
+            dic['width'] = img.width
+            dic['height'] = img.height
+            dic['func'] = 'display'
+            print "Sending " + `id(self)`
+            #self.connection.close()
+            self.connection.send(dic)
+            print "Finished Sending " + `id(self)`
+        else:
+            pass
+        if(self.connection.poll()):
+            print '*****************************************'
+            if(self.connection.recv() == 'close' ):
+                self.worker.terminate()
+                self.workerAlive = False
 
 
 
