@@ -1,7 +1,7 @@
 from multiprocessing import Pipe
 import socket
 
-socket.setdefaulttimeout(120.0)
+socket.setdefaulttimeout(1.0)
 
 
 string = 'x'*800000

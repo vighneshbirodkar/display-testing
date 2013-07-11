@@ -1,8 +1,11 @@
 from multiprocessing import Pipe,Process
 from time import sleep
 from sys import exit
+import socket
 
-dic = {'abc':'def'}
+socket.setdefaulttimeout(120.0)
+
+string = 'x'*800000
 class Worker(Process):
 
     def __init__(self,conn):
@@ -13,22 +16,16 @@ class Worker(Process):
         while(True):
             dataThere = self.connection.poll(0.1)
             if(dataThere):
-                print self.connection.recv()
+                print len(self.connection.recv())
                 exit()
                 
                 
 p1,c1 = Pipe()
 w1 = Worker(c1)
-p2,c2 = Pipe()
-w2 = Worker(c2)
 w1.start()
-w2.start()
 print "Processes started"
 sleep(2)
 print "Sending to 1"
-p1.send(dic)
-sleep(2)
-print "Sending to 2"
-p2.send(dic)
+p1.send(string)
 sleep(2)
 exit()
