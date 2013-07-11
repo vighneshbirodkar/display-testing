@@ -1,8 +1,10 @@
 from multiprocessing import Pipe
+import socket
 
-dic = {'abc':'def'}
-p,q = Pipe()
-p.send(dic)
-print q.recv()
-q.send(dic)
-print p.recv()
+socket.setdefaulttimeout(120.0)
+
+
+string = 'x'*800000
+r,s = Pipe()
+s.send(string)
+print len(r.recv())
