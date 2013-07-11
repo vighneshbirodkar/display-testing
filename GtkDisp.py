@@ -62,12 +62,8 @@ class GtkWorker(Process):
         
         print "Checking Message " + `id(self)`
         #examine the message and figure out what to do with it
-        try:
-            msg = self.connection.recv()
-            raise IOError
-        except IOError:
-            print """Oh No ! there was an IOError """
-            #return True
+
+        msg = self.connection.recv()
         
         if(msg['func'] == 'display'):
             self.showImg(msg)
